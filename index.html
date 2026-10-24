@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Apex Home & Living | Premium Comfort, Gardening & Health</title>
   <style>
-    /* RESET & BASE STYLES */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -17,8 +16,6 @@
       color: #1a202c;
       line-height: 1.6;
     }
-
-    /* 1. ANNOUNCEMENT BAR */
     .announcement-bar {
       background-color: #0d233a;
       color: #ffffff;
@@ -28,30 +25,25 @@
       font-weight: 600;
       letter-spacing: 0.5px;
     }
-
-    /* 2. STICKY HEADER NAV */
     .header-nav {
       background-color: #ffffff;
       box-shadow: 0 2px 10px rgba(0,0,0,0.08);
       position: sticky;
       top: 0;
       z-index: 1000;
-      padding: 15px 5%;
+      padding: 12px 5%;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
     .brand-logo {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: #0d233a;
-      text-decoration: none;
       display: flex;
       align-items: center;
-      gap: 8px;
+      text-decoration: none;
     }
-    .brand-logo span {
-      color: #2d6a4f;
+    .brand-logo img {
+      height: 45px;
+      width: auto;
     }
     .nav-links {
       display: flex;
@@ -81,8 +73,6 @@
     .cart-btn:hover {
       background-color: #2d6a4f;
     }
-
-    /* 3. HERO BANNER */
     .hero-section {
       background: linear-gradient(rgba(13, 35, 58, 0.85), rgba(13, 35, 58, 0.85)), 
                   url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
@@ -134,8 +124,6 @@
     .cta-btn:hover {
       background-color: #1b4332;
     }
-
-    /* 4. CATEGORY GATEWAY GRID */
     .section-title {
       text-align: center;
       font-size: 2rem;
@@ -183,66 +171,6 @@
       text-decoration: none;
       font-size: 1rem;
     }
-
-    /* 5. FEATURED PRODUCTS */
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
-      padding: 0 5% 70px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .product-card {
-      background: #ffffff;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      border: 1px solid #e2e8f0;
-    }
-    .product-img-wrapper {
-      width: 100%;
-      height: 220px;
-      background-color: #cbd5e1;
-      overflow: hidden;
-    }
-    .product-img-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .product-info {
-      padding: 22px;
-    }
-    .product-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #0d233a;
-      margin-bottom: 10px;
-    }
-    .product-price {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: #2d6a4f;
-      margin-bottom: 18px;
-    }
-    .order-btn {
-      display: block;
-      width: 100%;
-      background-color: #0d233a;
-      color: #ffffff;
-      text-align: center;
-      padding: 12px 0;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 700;
-      transition: background-color 0.2s ease;
-    }
-    .order-btn:hover {
-      background-color: #2d6a4f;
-    }
-
-    /* 6. FOOTER */
     .footer {
       background-color: #0d233a;
       color: #94a3b8;
@@ -267,37 +195,31 @@
       border-top: 1px solid #1e293b;
       padding-top: 20px;
     }
-
-    /* MOBILE RESPONSIVENESS */
     @media (max-width: 768px) {
       .nav-links { display: none; }
       .hero-section h1 { font-size: 1.9rem; }
-      .hero-section p { font-size: 1rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- 1. ANNOUNCEMENT BAR -->
   <div class="announcement-bar">
     🔥 NATIONWIDE PAY-ON-DELIVERY | INSPECT BEFORE YOU PAY | FREE SHIPPING OVER ₦50,000
   </div>
 
-  <!-- 2. STICKY HEADER NAV -->
   <header class="header-nav">
-    <a href="#" class="brand-logo">
-      🏠 APEX <span>HOME & LIVING</span>
+    <a href="index.html" class="brand-logo">
+      <img src="Logo.png" alt="Apex Home & Living Logo">
     </a>
     <ul class="nav-links">
-      <li><a href="#comfort">Comfort</a></li>
-      <li><a href="#gardening">Gardening</a></li>
-      <li><a href="#health">Health</a></li>
-      <li><a href="#support">Customer Support</a></li>
+      <li><a href="comfort.html">Comfort</a></li>
+      <li><a href="gardening.html">Gardening</a></li>
+      <li><a href="health.html">Health</a></li>
+      <li><a href="customer_support.html">Customer Support</a></li>
     </ul>
-    <a href="#products" class="cart-btn">Shop Now</a>
+    <a href="comfort.html" class="cart-btn">Shop Now</a>
   </header>
 
-  <!-- 3. HERO BANNER -->
   <section class="hero-section">
     <h1>Upgrade Your Space, Garden & Health Without Stress</h1>
     <p>Premium lifestyle products delivered directly to your doorstep across Nigeria.</p>
@@ -306,74 +228,37 @@
       <span class="badge">✓ Fast Courier Dispatch</span>
       <span class="badge">✓ 100% Quality Guaranteed</span>
     </div>
-    <a href="#products" class="cta-btn">Shop Best Sellers</a>
+    <a href="comfort.html" class="cta-btn">Shop Best Sellers</a>
   </section>
 
-  <!-- 4. THE 3-CATEGORY GATEWAY -->
   <h2 class="section-title">Explore Our Collections</h2>
   <div class="category-grid">
-    <div class="category-card" id="comfort">
+    <div class="category-card">
       <div class="category-icon">🛋️</div>
       <h3>Comfort</h3>
       <p>Ergonomic cushions, posture supports & premium relaxation gear.</p>
-      <a href="#products" class="category-btn">Browse Comfort →</a>
+      <a href="comfort.html" class="category-btn">Browse Comfort →</a>
     </div>
-    <div class="category-card" id="gardening">
+    <div class="category-card">
       <div class="category-icon">🌿</div>
       <h3>Gardening</h3>
       <p>Precision tools, outdoor care gear & effortless yard maintenance.</p>
-      <a href="#products" class="category-btn">Browse Gardening →</a>
+      <a href="gardening.html" class="category-btn">Browse Gardening →</a>
     </div>
-    <div class="category-card" id="health">
+    <div class="category-card">
       <div class="category-icon">❤️</div>
       <h3>Health</h3>
       <p>Daily wellness accessories, therapeutic tools & healthy living essentials.</p>
-      <a href="#products" class="category-btn">Browse Health →</a>
+      <a href="health.html" class="category-btn">Browse Health →</a>
     </div>
   </div>
 
-  <!-- 5. FEATURED PRODUCTS -->
-  <h2 class="section-title" id="products">Featured Products</h2>
-  <div class="product-grid">
-    <div class="product-card">
-      <div class="product-img-wrapper">
-        <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80" alt="Ergonomic Lumbar Cushion">
-      </div>
-      <div class="product-info">
-        <div class="product-title">Ergonomic Lumbar Support Cushion</div>
-        <div class="product-price">₦25,000</div>
-        <a href="#order" class="order-btn">Order - Pay on Delivery</a>
-      </div>
-    </div>
-    <div class="product-card">
-      <div class="product-img-wrapper">
-        <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=600&q=80" alt="Cordless Grass Trimmer">
-      </div>
-      <div class="product-info">
-        <div class="product-title">Cordless Precision Grass Trimmer</div>
-        <div class="product-price">₦38,500</div>
-        <a href="#order" class="order-btn">Order - Pay on Delivery</a>
-      </div>
-    </div>
-    <div class="product-card">
-      <div class="product-img-wrapper">
-        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=600&q=80" alt="Therapy Massager">
-      </div>
-      <div class="product-info">
-        <div class="product-title">Deep Tissue Muscle Therapy Massager</div>
-        <div class="product-price">₦32,000</div>
-        <a href="#order" class="order-btn">Order - Pay on Delivery</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- 6. FOOTER -->
-  <footer class="footer" id="support">
+  <footer class="footer">
     <ul class="footer-links">
-      <li><a href="#">About Apex Home & Living</a></li>
-      <li><a href="#">Pay-On-Delivery Terms</a></li>
-      <li><a href="#">Delivery & Shipping Info</a></li>
-      <li><a href="#">Customer Support</a></li>
+      <li><a href="customer_support.html">About Apex Home & Living</a></li>
+      <li><a href="customer_support.html">Pay-On-Delivery Terms</a></li>
+      <li><a href="customer_support.html">Delivery & Shipping Info</a></li>
+      <li><a href="customer_support.html">Customer Support</a></li>
     </ul>
     <div class="copyright">
       © 2026 Apex Home & Living Nigeria. All Rights Reserved.
