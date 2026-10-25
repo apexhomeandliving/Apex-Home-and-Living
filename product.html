@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details | Apex Home & Living</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body { background-color: #f8f9fa; color: #1a202c; line-height: 1.6; overflow-x: hidden; }
+
+    .announcement-bar { background-color: #0d233a; color: #ffffff; text-align: center; padding: 8px 15px; font-size: 0.8rem; font-weight: 600; }
+    
+    .header-nav {
+      background-color: #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      position: sticky; top: 0; z-index: 1000; padding: 12px 5%;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    }
+    .brand-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-svg { height: 42px; width: auto; }
+    .brand-text { display: flex; flex-direction: column; line-height: 1.05; }
+    .brand-text .main-title { font-size: 1.3rem; font-weight: 900; color: #0d233a; letter-spacing: 1.5px; }
+    .brand-text .sub-title { font-size: 0.6rem; font-weight: 700; color: #1b4d3e; letter-spacing: 1.5px; margin-top: 2px; }
+    
+    .nav-links { display: flex; list-style: none; gap: 18px; flex-wrap: wrap; }
+    .nav-links a { text-decoration: none; color: #334155; font-weight: 600; font-size: 0.9rem; }
+    .nav-links a:hover { color: #2d6a4f; }
+
+    .product-main-grid {
+      max-width: 1200px; margin: 30px auto; padding: 0 5%;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 35px;
+    }
+    .gallery-section { display: flex; flex-direction: column; gap: 12px; }
+    .main-media-view { width: 100%; height: 380px; background-color: #e2e8f0; border-radius: 12px; overflow: hidden; border: 1px solid #cbd5e1; }
+    .main-media-view img { width: 100%; height: 100%; object-fit: cover; }
+    .thumbnail-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; }
+    .thumb-box { width: 70px; height: 70px; min-width: 70px; border-radius: 8px; overflow: hidden; border: 2px solid transparent; cursor: pointer; background-color: #e2e8f0; }
+    .thumb-box.active { border-color: #2d6a4f; }
+    .thumb-box img { width: 100%; height: 100%; object-fit: cover; }
+
+    .buy-box { display: flex; flex-direction: column; gap: 15px; }
+    .prod-cat { font-size: 0.8rem; font-weight: 700; color: #2d6a4f; text-transform: uppercase; }
+    .prod-title { font-size: 1.5rem; font-weight: 800; color: #0d233a; line-height: 1.25; }
+    .current-price { font-size: 1.6rem; font-weight: 900; color: #2d6a4f; }
+    .pod-notice { background-color: #e8f5e9; border-left: 4px solid #2d6a4f; padding: 10px 12px; font-size: 0.85rem; color: #1b4e20; font-weight: 600; border-radius: 4px; }
+
+    .quantity-control { display: flex; align-items: center; gap: 12px; }
+    .quantity-control label { font-weight: 700; font-size: 0.9rem; color: #334155; }
+    .qty-btn-group { display: flex; align-items: center; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; background: #fff; }
+    .qty-btn { background: #f1f5f9; border: none; padding: 6px 14px; font-size: 1rem; font-weight: 700; cursor: pointer; color: #0d233a; }
+    .qty-num { padding: 6px 16px; font-weight: 700; font-size: 0.95rem; }
+
+    .action-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 5px; }
+    .btn-buy-now {
+      background-color: #2d6a4f; color: #ffffff; padding: 13px 0; border-radius: 8px;
+      font-weight: 700; font-size: 1rem; border: none; cursor: pointer; text-align: center; text-decoration: none;
+    }
+    .btn-buy-now:hover { background-color: #1b4332; }
+
+    .product-details-lower { max-width: 1200px; margin: 30px auto 50px; padding: 0 5%; }
+    .tab-content { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+    .tab-content h2 { color: #0d233a; font-size: 1.2rem; margin-bottom: 12px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
+    .tab-content p { color: #475569; font-size: 0.95rem; margin-bottom: 15px; line-height: 1.6; }
+
+    .footer { background-color: #0d233a; color: #94a3b8; padding: 30px 5% 20px; text-align: center; }
+    .footer-links { display: flex; justify-content: center; gap: 15px; list-style: none; margin-bottom: 20px; flex-wrap: wrap; }
+    .footer-links a { color: #cbd5e1; text-decoration: none; font-size: 0.85rem; }
+    .copyright { font-size: 0.8rem; border-top: 1px solid #1e293b; padding-top: 15px; }
+
+    @media (max-width: 768px) {
+      .product-main-grid { grid-template-columns: 1fr; gap: 20px; }
+      .main-media-view { height: 300px; }
+      .header-nav { justify-content: center; text-align: center; padding: 10px; }
+      .nav-links { gap: 10px; justify-content: center; font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="announcement-bar">🔥 NATIONWIDE PAY-ON-DELIVERY | INSPECT BEFORE YOU PAY | FREE SHIPPING OVER ₦50,000</div>
+
+  <header class="header-nav">
+    <a href="index.html" class="brand-logo">
+      <svg class="logo-svg" viewBox="0 0 160 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 50 L80 15 L145 50" stroke="#0d233a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M112 32 V18 H126 V41" stroke="#0d233a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="68" y="34" width="10" height="10" fill="#0d233a"/>
+        <rect x="82" y="34" width="10" height="10" fill="#0d233a"/>
+        <rect x="68" y="47" width="10" height="10" fill="#0d233a"/>
+        <rect x="82" y="47" width="10" height="10" fill="#0d233a"/>
+        <path d="M15 70 C 50 50, 110 82, 145 62" stroke="#0d233a" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M110 58 C 105 40, 128 35, 138 48 C 142 35, 158 42, 150 58 C 138 65, 120 65, 110 58 Z" fill="#2d6a4f"/>
+      </svg>
+      <div class="brand-text">
+        <span class="main-title">APEX</span>
+        <span class="sub-title">HOME & LIVING</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="comfort.html">Comfort</a></li>
+      <li><a href="gardening.html">Gardening</a></li>
+      <li><a href="health.html">Health</a></li>
+      <li><a href="customer_support.html">Support</a></li>
+    </ul>
+  </header>
+
+  <div class="product-main-grid">
+    <div class="gallery-section">
+      <div class="main-media-view">
+        <img id="mainImage" src="" alt="Product Image">
+      </div>
+      <div class="thumbnail-strip" id="thumbStrip"></div>
+    </div>
+
+    <div class="buy-box">
+      <span class="prod-cat" id="prodCat">Loading...</span>
+      <h1 class="prod-title" id="prodTitle">Loading product...</h1>
+      <div class="current-price" id="prodPrice">₦0</div>
+      <div class="pod-notice">✓ <strong>Pay on Delivery:</strong> Inspect product before paying our courier driver.</div>
+
+      <div class="quantity-control">
+        <label>Quantity:</label>
+        <div class="qty-btn-group">
+          <button class="qty-btn" onclick="changeQty(-1)">-</button>
+          <span class="qty-num" id="qtyVal">1</span>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button id="orderBtn" class="btn-buy-now">⚡ Order Now - Pay on Delivery</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-details-lower">
+    <div class="tab-content">
+      <h2>Product Overview</h2>
+      <p id="prodDesc">Loading description...</p>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <ul class="footer-links">
+      <li><a href="customer_support.html">About Apex</a></li>
+      <li><a href="customer_support.html">Pay-On-Delivery Terms</a></li>
+      <li><a href="customer_support.html">Shipping Info</a></li>
+      <li><a href="customer_support.html">Customer Support</a></li>
+    </ul>
+    <div class="copyright">© 2026 Apex Home & Living Nigeria. All Rights Reserved.</div>
+  </footer>
+
+  <script>
+    const SUPABASE_URL = "https://xdqkvwyuyqmtvkdtjjdu.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_YSudmbhRJKQv5Zlo1Zuu3Q_YNQgqQ8Y";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let currentQty = 1;
+    function changeQty(val) {
+      if (currentQty + val > 0) {
+        currentQty += val;
+        document.getElementById('qtyVal').innerText = currentQty;
+      }
+    }
+
+    async function loadProductDetails() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('id');
+      if (!productId) {
+        alert("No product specified.");
+        window.location.href = "index.html";
+        return;
+      }
+
+      const { data: product, error } = await _supabase
+        .from('products')
+        .select('*')
+        .eq('id', productId)
+        .single();
+
+      if (error || !product) {
+        alert("Product not found.");
+        window.location.href = "index.html";
+        return;
+      }
+
+      document.getElementById('prodCat').innerText = `${product.category} Collection`;
+      document.getElementById('prodTitle').innerText = product.title;
+      document.getElementById('prodPrice').innerText = `₦${product.price.toLocaleString()}`;
+      document.getElementById('prodDesc').innerText = product.description || "No description provided.";
+
+      if (product.images && product.images.length > 0) {
+        document.getElementById('mainImage').src = product.images[0];
+        document.getElementById('thumbStrip').innerHTML = product.images.map((img, idx) => `
+          <div class="thumb-box ${idx === 0 ? 'active' : ''}" onclick="document.getElementById('mainImage').src='${img}'">
+            <img src="${img}">
+          </div>
+        `).join('');
+      }
+
+      const orderBtn = document.getElementById('orderBtn');
+      orderBtn.onclick = () => {
+        if (product.is_hero) {
+          window.location.href = `upsell.html?id=${product.id}&qty=${currentQty}`;
+        } else {
+          window.location.href = `checkout.html?id=${product.id}&qty=${currentQty}`;
+        }
+      };
+    }
+
+    loadProductDetails();
+  </script>
+</body>
+</html>

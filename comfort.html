@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comfort Collection | Apex Home & Living</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body { background-color: #f8f9fa; color: #1a202c; line-height: 1.6; overflow-x: hidden; }
+
+    .announcement-bar { background-color: #0d233a; color: #ffffff; text-align: center; padding: 8px 15px; font-size: 0.8rem; font-weight: 600; }
+    
+    .header-nav {
+      background-color: #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      position: sticky; top: 0; z-index: 1000; padding: 12px 5%;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    }
+    .brand-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-svg { height: 42px; width: auto; }
+    .brand-text { display: flex; flex-direction: column; line-height: 1.05; }
+    .brand-text .main-title { font-size: 1.3rem; font-weight: 900; color: #0d233a; letter-spacing: 1.5px; }
+    .brand-text .sub-title { font-size: 0.6rem; font-weight: 700; color: #1b4d3e; letter-spacing: 1.5px; margin-top: 2px; }
+
+    .nav-links { display: flex; list-style: none; gap: 18px; flex-wrap: wrap; }
+    .nav-links a { text-decoration: none; color: #334155; font-weight: 600; font-size: 0.9rem; }
+    .nav-links a.active { color: #2d6a4f; border-bottom: 2px solid #2d6a4f; padding-bottom: 2px; }
+    .cart-btn { background-color: #0d233a; color: #ffffff; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem; }
+
+    .category-hero {
+      background: linear-gradient(rgba(13, 35, 58, 0.9), rgba(13, 35, 58, 0.9)), 
+                  url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+      color: #ffffff; padding: 35px 5%; text-align: center;
+    }
+    .category-hero h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
+    .category-hero p { color: #e2e8f0; font-size: 0.95rem; }
+
+    .controls-bar {
+      max-width: 1200px; margin: 20px auto 15px; padding: 0 5%;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .search-box input { padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; width: 100%; max-width: 280px; font-size: 0.9rem; outline: none; }
+    .sort-box select { padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; background: #fff; cursor: pointer; }
+
+    .product-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px; padding: 0 5% 50px; max-width: 1200px; margin: 0 auto;
+    }
+    .product-card {
+      background: #ffffff; border-radius: 10px; overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04); border: 1px solid #e2e8f0;
+      display: flex; flex-direction: column; transition: transform 0.2s ease;
+    }
+    .product-card:hover { transform: translateY(-4px); }
+    .product-img { width: 100%; height: 200px; object-fit: cover; background-color: #f1f5f9; }
+    .product-body { padding: 16px; display: flex; flex-direction: column; flex-grow: 1; }
+    .product-title { font-size: 1rem; font-weight: 700; color: #0d233a; margin-bottom: 8px; }
+    .product-price { font-size: 1.15rem; font-weight: 800; color: #2d6a4f; margin-bottom: 15px; margin-top: auto; }
+    .view-btn {
+      background-color: #0d233a; color: #ffffff; text-align: center; padding: 10px 0;
+      border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: background 0.2s;
+    }
+    .view-btn:hover { background-color: #2d6a4f; }
+
+    .pagination { display: flex; justify-content: center; gap: 8px; margin-bottom: 60px; }
+    .page-num { padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff; color: #0d233a; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .page-num.active { background-color: #0d233a; color: #ffffff; border-color: #0d233a; }
+
+    .footer { background-color: #0d233a; color: #94a3b8; padding: 30px 5% 20px; text-align: center; }
+    .footer-links { display: flex; justify-content: center; gap: 15px; list-style: none; margin-bottom: 20px; flex-wrap: wrap; }
+    .footer-links a { color: #cbd5e1; text-decoration: none; font-size: 0.85rem; }
+    .copyright { font-size: 0.8rem; border-top: 1px solid #1e293b; padding-top: 15px; }
+
+    @media (max-width: 600px) {
+      .header-nav { justify-content: center; text-align: center; padding: 10px; }
+      .nav-links { gap: 10px; justify-content: center; font-size: 0.85rem; }
+      .controls-bar { flex-direction: column; align-items: stretch; }
+      .search-box input { max-width: 100%; }
+      .sort-box select { width: 100%; }
+      .category-hero h1 { font-size: 1.5rem; }
+      .product-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="announcement-bar">🔥 NATIONWIDE PAY-ON-DELIVERY | INSPECT BEFORE YOU PAY</div>
+
+  <header class="header-nav">
+    <a href="index.html" class="brand-logo">
+      <svg class="logo-svg" viewBox="0 0 160 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 50 L80 15 L145 50" stroke="#0d233a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M112 32 V18 H126 V41" stroke="#0d233a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="68" y="34" width="10" height="10" fill="#0d233a"/>
+        <rect x="82" y="34" width="10" height="10" fill="#0d233a"/>
+        <rect x="68" y="47" width="10" height="10" fill="#0d233a"/>
+        <rect x="82" y="47" width="10" height="10" fill="#0d233a"/>
+        <path d="M15 70 C 50 50, 110 82, 145 62" stroke="#0d233a" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M110 58 C 105 40, 128 35, 138 48 C 142 35, 158 42, 150 58 C 138 65, 120 65, 110 58 Z" fill="#2d6a4f"/>
+      </svg>
+      <div class="brand-text">
+        <span class="main-title">APEX</span>
+        <span class="sub-title">HOME & LIVING</span>
+      </div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="comfort.html" class="active">Comfort</a></li>
+      <li><a href="gardening.html">Gardening</a></li>
+      <li><a href="health.html">Health</a></li>
+      <li><a href="customer_support.html">Support</a></li>
+    </ul>
+  </header>
+
+  <div class="category-hero">
+    <h1>Comfort Collection</h1>
+    <p>Ergonomic cushions, posture supports & premium home relaxation gear.</p>
+  </div>
+
+  <div class="controls-bar">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search Comfort products...">
+    </div>
+    <div class="sort-box">
+      <select id="sortSelect" onchange="sortProducts()">
+        <option value="featured">Sort by: Featured</option>
+        <option value="low-high">Price: Low to High</option>
+        <option value="high-low">Price: High to Low</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="product-grid" id="productGrid">
+    <p style="grid-column: 1/-1; text-align: center;">Loading Comfort collection...</p>
+  </div>
+
+  <div class="pagination">
+    <a href="#" class="page-num active">1</a>
+  </div>
+
+  <footer class="footer">
+    <ul class="footer-links">
+      <li><a href="customer_support.html">About Apex</a></li>
+      <li><a href="customer_support.html">Pay-On-Delivery Terms</a></li>
+      <li><a href="customer_support.html">Shipping Info</a></li>
+      <li><a href="customer_support.html">Customer Support</a></li>
+    </ul>
+    <div class="copyright">© 2026 Apex Home & Living Nigeria. All Rights Reserved.</div>
+  </footer>
+
+  <script>
+    const SUPABASE_URL = "https://xdqkvwyuyqmtvkdtjjdu.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_YSudmbhRJKQv5Zlo1Zuu3Q_YNQgqQ8Y";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let fetchedProducts = [];
+
+    async function fetchCategoryProducts() {
+      const grid = document.getElementById('productGrid');
+      const { data: products, error } = await _supabase
+        .from('products')
+        .select('*')
+        .eq('category', 'Comfort')
+        .order('id', { ascending: false });
+
+      if (error || !products || products.length === 0) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No products in Comfort collection yet.</p>';
+        return;
+      }
+      fetchedProducts = products;
+      renderGrid(fetchedProducts);
+    }
+
+    function renderGrid(products) {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = products.map(prod => `
+        <div class="product-card">
+          <img src="${(prod.images && prod.images[0]) ? prod.images[0] : 'https://via.placeholder.com/300'}" class="product-img" alt="${prod.title}">
+          <div class="product-body">
+            <div class="product-title">${prod.title}</div>
+            <div class="product-price">₦${prod.price ? prod.price.toLocaleString() : 0}</div>
+            <a href="product.html?id=${prod.id}" class="view-btn">View Details & Order</a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      renderGrid(fetchedProducts.filter(p => p.title.toLowerCase().includes(query)));
+    });
+
+    function sortProducts() {
+      const val = document.getElementById('sortSelect').value;
+      let sorted = [...fetchedProducts];
+      if (val === 'low-high') sorted.sort((a, b) => a.price - b.price);
+      if (val === 'high-low') sorted.sort((a, b) => b.price - a.price);
+      renderGrid(sorted);
+    }
+
+    fetchCategoryProducts();
+  </script>
+</body>
+</html>

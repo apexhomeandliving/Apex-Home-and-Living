@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Direct Checkout | Apex Home & Living</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body { background-color: #f8f9fa; color: #1a202c; line-height: 1.6; overflow-x: hidden; }
+
+    .header-nav {
+      background: #ffffff; padding: 12px 5%; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+    }
+    .brand-logo { font-size: 1.1rem; font-weight: 800; color: #0d233a; text-decoration: none; }
+
+    .container { max-width: 600px; margin: 30px auto; padding: 0 15px; }
+    .checkout-card {
+      background: #ffffff; border-radius: 12px; border: 1px solid #cbd5e1;
+      padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+    .summary-box {
+      background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
+      padding: 15px; margin-bottom: 20px;
+    }
+    .summary-title { font-weight: 700; color: #0d233a; font-size: 1.05rem; margin-bottom: 5px; }
+    .summary-price { font-weight: 900; color: #2d6a4f; font-size: 1.15rem; }
+
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 5px; color: #334155; }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; outline: none;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: #0d233a; }
+
+    .btn-submit {
+      width: 100%; background: #2d6a4f; color: #fff; padding: 14px; border: none;
+      border-radius: 8px; font-weight: 800; font-size: 1rem; cursor: pointer;
+    }
+    .btn-submit:hover { background: #1b4332; }
+
+    @media (max-width: 600px) {
+      .header-nav { justify-content: center; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header-nav">
+    <a href="index.html" class="brand-logo">APEX HOME & LIVING</a>
+    <span style="font-weight: 600; font-size: 0.85rem; color: #2d6a4f;">🔒 Secure Pay-On-Delivery Checkout</span>
+  </header>
+
+  <div class="container">
+    <div class="checkout-card">
+      <h3 style="margin-bottom: 18px; color: #0d233a; font-size: 1.2rem;">📦 Order Summary & Delivery</h3>
+      
+      <div class="summary-box" id="orderSummary">
+        <div class="summary-title" id="prodName">Loading product...</div>
+        <div style="font-size: 0.9rem; color: #475569;">Quantity: <span id="prodQty">1</span></div>
+        <div class="summary-price" id="prodTotal">₦0</div>
+      </div>
+
+      <form id="directCheckoutForm">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="custName" required placeholder="e.g. Chukwudi Adeleke">
+        </div>
+        <div class="form-group">
+          <label>Phone Number (for Courier Dispatch)</label>
+          <input type="tel" id="custPhone" required placeholder="e.g. 08031234567">
+        </div>
+        <div class="form-group">
+          <label>Delivery Address & State</label>
+          <textarea id="custAddress" rows="3" required placeholder="House number, street name, bus stop, city, state"></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Confirm Order - Pay on Delivery</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://xdqkvwyuyqmtvkdtjjdu.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_YSudmbhRJKQv5Zlo1Zuu3Q_YNQgqQ8Y";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+    const qty = parseInt(urlParams.get('qty')) || 1;
+
+    let loadedProduct = null;
+
+    async function loadCheckoutDetails() {
+      if (!productId) {
+        alert("Invalid product.");
+        window.location.href = "index.html";
+        return;
+      }
+
+      const { data, error } = await _supabase.from('products').select('*').eq('id', productId).single();
+      if (error || !data) {
+        alert("Product not found.");
+        window.location.href = "index.html";
+        return;
+      }
+
+      loadedProduct = data;
+      document.getElementById('prodName').innerText = loadedProduct.title;
+      document.getElementById('prodQty').innerText = qty;
+      document.getElementById('prodTotal').innerText = `₦${(loadedProduct.price * qty).toLocaleString()}`;
+    }
+
+    document.getElementById('directCheckoutForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('custName').value;
+      const phone = document.getElementById('custPhone').value;
+      const address = document.getElementById('custAddress').value;
+
+      await _supabase
+        .from('customers')
+        .upsert([{ full_name: name, phone: phone, delivery_address: address }], { onConflict: 'phone' });
+
+      const { error } = await _supabase.from('orders').insert([{
+        customer_name: name,
+        customer_phone: phone,
+        delivery_address: address,
+        items: [{ title: loadedProduct.title, price: loadedProduct.price, quantity: qty }],
+        total_amount: loadedProduct.price * qty,
+        has_warranty: false,
+        status: 'Pending'
+      }]);
+
+      if (!error) {
+        alert("🎉 Order Confirmed! Our team will call you shortly before dispatch.");
+        window.location.href = "index.html";
+      } else {
+        alert("Error saving order: " + error.message);
+      }
+    });
+
+    loadCheckoutDetails();
+  </script>
+</body>
+</html>
