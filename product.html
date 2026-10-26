@@ -57,10 +57,14 @@
     }
     .btn-buy-now:hover { background-color: #1b4332; }
 
-    .product-details-lower { max-width: 1200px; margin: 30px auto 50px; padding: 0 5%; }
+    .product-details-lower { max-width: 1200px; margin: 30px auto 50px; padding: 0 5%; display: flex; flex-direction: column; gap: 20px; }
     .tab-content { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
     .tab-content h2 { color: #0d233a; font-size: 1.2rem; margin-bottom: 12px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; }
-    .tab-content p { color: #475569; font-size: 0.95rem; margin-bottom: 15px; line-height: 1.6; }
+    .tab-content p { color: #475569; font-size: 0.95rem; margin-bottom: 15px; line-height: 1.6; white-space: pre-line; }
+
+    .feature-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+    .feature-list li { font-size: 0.95rem; color: #334155; display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
+    .feature-list li::before { content: "✓"; font-weight: 900; color: #2d6a4f; background: #e8f5e9; padding: 2px 8px; border-radius: 50%; font-size: 0.8rem; }
 
     .footer { background-color: #0d233a; color: #94a3b8; padding: 30px 5% 20px; text-align: center; }
     .footer-links { display: flex; justify-content: center; gap: 15px; list-style: none; margin-bottom: 20px; flex-wrap: wrap; }
@@ -100,6 +104,7 @@
       <li><a href="comfort.html">Comfort</a></li>
       <li><a href="gardening.html">Gardening</a></li>
       <li><a href="health.html">Health</a></li>
+      <li><a href="track_order.html">Track Order</a></li>
       <li><a href="customer_support.html">Support</a></li>
     </ul>
   </header>
@@ -135,16 +140,21 @@
 
   <div class="product-details-lower">
     <div class="tab-content">
-      <h2>Product Overview</h2>
+      <h2>📖 Product Overview</h2>
       <p id="prodDesc">Loading description...</p>
+    </div>
+
+    <div class="tab-content" id="featuresCard" style="display: none;">
+      <h2>✨ Key Product Features</h2>
+      <ul class="feature-list" id="featuresList"></ul>
     </div>
   </div>
 
   <footer class="footer">
     <ul class="footer-links">
+      <li><a href="track_order.html">Track Order</a></li>
       <li><a href="customer_support.html">About Apex</a></li>
       <li><a href="customer_support.html">Pay-On-Delivery Terms</a></li>
-      <li><a href="customer_support.html">Shipping Info</a></li>
       <li><a href="customer_support.html">Customer Support</a></li>
     </ul>
     <div class="copyright">© 2026 Apex Home & Living Nigeria. All Rights Reserved.</div>
@@ -189,6 +199,15 @@
       document.getElementById('prodPrice').innerText = `₦${product.price.toLocaleString()}`;
       document.getElementById('prodDesc').innerText = product.description || "No description provided.";
 
+      // Render Features List separately
+      if (product.features && Array.isArray(product.features) && product.features.length > 0) {
+        const featuresCard = document.getElementById('featuresCard');
+        const featuresList = document.getElementById('featuresList');
+        featuresList.innerHTML = product.features.map(f => `<li>${f}</li>`).join('');
+        featuresCard.style.display = 'block';
+      }
+
+      // Render Image Gallery
       if (product.images && product.images.length > 0) {
         document.getElementById('mainImage').src = product.images[0];
         document.getElementById('thumbStrip').innerHTML = product.images.map((img, idx) => `
