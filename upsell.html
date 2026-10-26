@@ -65,16 +65,17 @@
     }
     .btn-submit:hover { background: #1b4332; }
 
-    /* CUSTOM BRANDED MODAL OVERLAY */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(13, 35, 58, 0.7); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px;
     }
     .modal-card {
-      background: #ffffff; max-width: 420px; width: 100%; border-radius: 12px; padding: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      background: #ffffff; max-width: 440px; width: 100%; border-radius: 12px; padding: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
     .modal-card h3 { color: #0d233a; font-size: 1.4rem; margin-bottom: 10px; }
-    .modal-card p { color: #475569; font-size: 0.95rem; margin-bottom: 20px; }
+    .modal-card p { color: #475569; font-size: 0.95rem; margin-bottom: 15px; }
+    .code-badge { background: #e8f5e9; color: #1b4d3e; font-weight: 800; font-size: 1.2rem; padding: 8px 16px; border-radius: 6px; border: 1px dashed #2d6a4f; display: inline-block; margin: 10px 0; }
+    .support-box { background: #f8fafc; border-radius: 8px; padding: 10px; font-size: 0.85rem; color: #334155; margin-bottom: 20px; border: 1px solid #e2e8f0; }
     .modal-btn { background: #2d6a4f; color: #fff; border: none; padding: 10px 25px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.95rem; }
 
     @media (max-width: 600px) {
@@ -133,12 +134,20 @@
     </div>
   </div>
 
-  <!-- SUCCESS MODAL -->
   <div class="modal-overlay" id="successModal">
     <div class="modal-card">
       <h3>🏠 Apex Home & Living</h3>
       <p>🎉 Hero Bundle Order Confirmed! Our agent will call you shortly before dispatch.</p>
-      <button class="modal-btn" onclick="window.location.href='index.html'">Okay, Return Home</button>
+      <p style="font-size:0.85rem; font-weight:700; color:#0d233a; margin-bottom: 2px;">Your Order Tracking Code:</p>
+      <div class="code-badge" id="modalTrackingCode">APX-000000</div>
+      
+      <div class="support-box">
+        📞 <strong>Customer Support Line:</strong><br>
+        <span style="font-size: 0.95rem; font-weight: 700; color: #0d233a;">+234 800 273 9466</span><br>
+        <span style="font-size:0.75rem; color:#64748b;">(Available 8 AM – 8 PM Daily for updates or changes)</span>
+      </div>
+
+      <button class="modal-btn" onclick="window.location.href='track_order.html'">Track Your Order</button>
     </div>
   </div>
 
@@ -211,6 +220,7 @@
       const phone = document.getElementById('custPhone').value;
       const address = document.getElementById('custAddress').value;
       const hasWarranty = document.getElementById('warrantyCheck').checked;
+      const trackingCode = 'APX-' + Math.floor(100000 + Math.random() * 900000);
 
       let orderedItems = [{ title: baseProduct.title, price: baseProduct.price, quantity: qty }];
       const checks = document.querySelectorAll('.upsell-check');
@@ -230,10 +240,12 @@
         items: orderedItems,
         total_amount: numericTotal,
         has_warranty: hasWarranty,
-        status: 'Pending'
+        status: 'Pending',
+        tracking_code: trackingCode
       }]);
 
       if (!orderErr) {
+        document.getElementById('modalTrackingCode').innerText = trackingCode;
         document.getElementById('successModal').style.display = 'flex';
       } else {
         alert("Error placing order: " + orderErr.message);
