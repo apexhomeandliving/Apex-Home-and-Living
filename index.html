@@ -4,250 +4,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Apex Home & Living | Premium Comfort, Gardening & Health</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-    }
-    body {
-      background-color: #f8f9fa;
-      color: #1a202c;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body { background-color: #f8f9fa; color: #1a202c; line-height: 1.6; overflow-x: hidden; }
 
-    /* 1. ANNOUNCEMENT BAR */
-    .announcement-bar {
-      background-color: #0d233a;
-      color: #ffffff;
-      text-align: center;
-      padding: 8px 15px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-
-    /* 2. STICKY HEADER NAV */
+    .announcement-bar { background-color: #0d233a; color: #ffffff; text-align: center; padding: 8px 15px; font-size: 0.8rem; font-weight: 600; }
+    
     .header-nav {
-      background-color: #ffffff;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      padding: 12px 5%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
+      background-color: #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      position: sticky; top: 0; z-index: 1000; padding: 12px 5%;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
     }
+    .brand-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-svg { height: 42px; width: auto; }
+    .brand-text { display: flex; flex-direction: column; line-height: 1.05; }
+    .brand-text .main-title { font-size: 1.3rem; font-weight: 900; color: #0d233a; letter-spacing: 1.5px; }
+    .brand-text .sub-title { font-size: 0.6rem; font-weight: 700; color: #1b4d3e; letter-spacing: 1.5px; margin-top: 2px; }
+    
+    .nav-links { display: flex; list-style: none; gap: 18px; flex-wrap: wrap; }
+    .nav-links a { text-decoration: none; color: #334155; font-weight: 600; font-size: 0.9rem; }
+    .nav-links a:hover, .nav-links a.active { color: #2d6a4f; }
 
-    /* BRAND LOGO VECTOR MARK & TEXT */
-    .brand-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-    .logo-svg {
-      height: 42px;
-      width: auto;
-    }
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.05;
-    }
-    .brand-text .main-title {
-      font-size: 1.3rem;
-      font-weight: 900;
-      color: #0d233a;
-      letter-spacing: 1.5px;
-    }
-    .brand-text .sub-title {
-      font-size: 0.6rem;
-      font-weight: 700;
-      color: #1b4d3e;
-      letter-spacing: 1.5px;
-      margin-top: 2px;
-    }
-
-    .nav-links {
-      display: flex;
-      list-style: none;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-    .nav-links a {
-      text-decoration: none;
-      color: #334155;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: color 0.2s ease;
-    }
-    .nav-links a:hover {
-      color: #2d6a4f;
-    }
-    .cart-btn {
-      background-color: #0d233a;
-      color: #ffffff;
-      padding: 8px 16px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.85rem;
-      transition: background-color 0.2s ease;
-    }
-    .cart-btn:hover {
-      background-color: #2d6a4f;
-    }
-
-    /* 3. HERO BANNER */
     .hero-section {
-      background: linear-gradient(rgba(13, 35, 58, 0.85), rgba(13, 35, 58, 0.85)), 
-                  url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
-      color: #ffffff;
-      padding: 70px 5% 80px;
-      text-align: center;
+      background: linear-gradient(rgba(13, 35, 58, 0.85), rgba(27, 77, 62, 0.85)), url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+      color: white; padding: 70px 5%; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 20px;
     }
-    .hero-section h1 {
-      font-size: 2.1rem;
-      font-weight: 800;
-      margin-bottom: 15px;
-      max-width: 850px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .hero-section p {
-      font-size: 1.05rem;
-      color: #e2e8f0;
-      margin-bottom: 25px;
-      max-width: 650px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .trust-badges {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 30px;
-      flex-wrap: wrap;
-    }
-    .badge {
-      background: rgba(255, 255, 255, 0.15);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      backdrop-filter: blur(5px);
-    }
-    .cta-btn {
-      background-color: #2d6a4f;
-      color: #ffffff;
-      padding: 14px 30px;
-      font-size: 1rem;
-      font-weight: 700;
-      border-radius: 8px;
-      text-decoration: none;
-      display: inline-block;
-      transition: background-color 0.2s ease;
-    }
-    .cta-btn:hover {
-      background-color: #1b4332;
-    }
+    .hero-section h1 { font-size: 2.3rem; font-weight: 900; max-width: 800px; line-height: 1.2; }
+    .hero-section p { font-size: 1.05rem; max-width: 650px; color: #e2e8f0; }
 
-    /* 4. CATEGORY GATEWAY GRID */
-    .section-title {
-      text-align: center;
-      font-size: 1.7rem;
-      margin: 45px 0 25px;
-      color: #0d233a;
-      font-weight: 800;
+    /* QUICK TRACK WIDGET ON HOMEPAGE */
+    .quick-track-box {
+      background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.3);
+      display: flex; gap: 10px; width: 100%; max-width: 480px; margin-top: 10px; backdrop-filter: blur(5px);
     }
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 25px;
-      padding: 0 5% 50px;
-      max-width: 1200px;
-      margin: 0 auto;
+    .quick-track-box input {
+      flex: 1; padding: 10px 14px; border: none; border-radius: 6px; font-size: 0.9rem; outline: none; background: #fff; color: #0d233a;
     }
-    .category-card {
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 30px 20px;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      border: 1px solid #e2e8f0;
-      transition: transform 0.2s ease;
+    .quick-track-box button {
+      background: #2d6a4f; color: #fff; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 700; cursor: pointer;
     }
-    .category-card:hover {
-      transform: translateY(-5px);
-    }
-    .category-icon {
-      font-size: 2.5rem;
-      margin-bottom: 12px;
-    }
-    .category-card h3 {
-      font-size: 1.3rem;
-      color: #0d233a;
-      margin-bottom: 10px;
-    }
-    .category-card p {
-      color: #64748b;
-      font-size: 0.9rem;
-      margin-bottom: 18px;
-    }
-    .category-btn {
-      color: #2d6a4f;
-      font-weight: 700;
-      text-decoration: none;
-      font-size: 0.95rem;
-    }
+    .quick-track-box button:hover { background: #1b4332; }
 
-    /* 5. FOOTER */
-    .footer {
-      background-color: #0d233a;
-      color: #94a3b8;
-      padding: 40px 5% 20px;
-      text-align: center;
-    }
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      list-style: none;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .footer-links a {
-      color: #cbd5e1;
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
-    .copyright {
-      font-size: 0.8rem;
-      border-top: 1px solid #1e293b;
-      padding-top: 15px;
-    }
+    .container { max-width: 1200px; margin: 40px auto; padding: 0 5%; }
+    .section-title { font-size: 1.6rem; font-weight: 800; color: #0d233a; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+    
+    .category-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .cat-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid #cbd5e1; background: #fff; font-weight: 700; font-size: 0.85rem; cursor: pointer; color: #334155; }
+    .cat-btn.active { background: #0d233a; color: #fff; border-color: #0d233a; }
 
-    @media (max-width: 600px) {
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+    .product-card {
+      background: #ffffff; border-radius: 10px; border: 1px solid #e2e8f0; overflow: hidden;
+      display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit;
+    }
+    .product-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+    .product-img { width: 100%; height: 200px; object-fit: cover; background: #e2e8f0; }
+    .product-info { padding: 15px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .product-category-tag { font-size: 0.75rem; font-weight: 700; color: #2d6a4f; text-transform: uppercase; }
+    .product-name { font-size: 1rem; font-weight: 700; color: #0d233a; line-height: 1.3; }
+    .product-price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 10px; }
+    .product-price { font-weight: 900; color: #2d6a4f; font-size: 1.1rem; }
+    .btn-view { background: #0d233a; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; }
+
+    .footer { background-color: #0d233a; color: #94a3b8; padding: 30px 5% 20px; text-align: center; margin-top: 50px; }
+    .footer-links { display: flex; justify-content: center; gap: 15px; list-style: none; margin-bottom: 20px; flex-wrap: wrap; }
+    .footer-links a { color: #cbd5e1; text-decoration: none; font-size: 0.85rem; }
+    .copyright { font-size: 0.8rem; border-top: 1px solid #1e293b; padding-top: 15px; }
+
+    @media (max-width: 768px) {
+      .hero-section h1 { font-size: 1.7rem; }
       .header-nav { justify-content: center; text-align: center; padding: 10px; }
       .nav-links { gap: 10px; justify-content: center; font-size: 0.85rem; }
-      .hero-section h1 { font-size: 1.6rem; }
-      .hero-section p { font-size: 0.95rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- 1. ANNOUNCEMENT BAR -->
-  <div class="announcement-bar">
-    🔥 NATIONWIDE PAY-ON-DELIVERY | INSPECT BEFORE YOU PAY | FREE SHIPPING OVER ₦50,000
-  </div>
+  <div class="announcement-bar">🔥 NATIONWIDE PAY-ON-DELIVERY | INSPECT BEFORE YOU PAY | FREE SHIPPING OVER ₦50,000</div>
 
-  <!-- 2. STICKY HEADER NAV -->
   <header class="header-nav">
     <a href="index.html" class="brand-logo">
       <svg class="logo-svg" viewBox="0 0 160 110" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -265,64 +100,103 @@
         <span class="sub-title">HOME & LIVING</span>
       </div>
     </a>
-
     <ul class="nav-links">
       <li><a href="comfort.html">Comfort</a></li>
       <li><a href="gardening.html">Gardening</a></li>
       <li><a href="health.html">Health</a></li>
-      <li><a href="customer_support.html">Customer Support</a></li>
+      <li><a href="track_order.html">Track Order</a></li>
+      <li><a href="customer_support.html">Support</a></li>
     </ul>
-
-    <a href="comfort.html" class="cart-btn">Shop Now</a>
   </header>
 
-  <!-- 3. HERO BANNER -->
   <section class="hero-section">
-    <h1>Upgrade Your Space, Garden & Health Without Stress</h1>
-    <p>Premium lifestyle products delivered directly to your doorstep across Nigeria.</p>
-    <div class="trust-badges">
-      <span class="badge">✓ Pay on Delivery</span>
-      <span class="badge">✓ Fast Courier Dispatch</span>
-      <span class="badge">✓ 100% Quality Guaranteed</span>
-    </div>
-    <a href="comfort.html" class="cta-btn">Shop Best Sellers</a>
+    <h1>Elevate Your Living. 100% Secure Pay-On-Delivery.</h1>
+    <p>Discover hand-picked comfort, gardening, and wellness essentials delivered straight to your doorstep nationwide. Inspect before you pay.</p>
+    
+    <!-- Quick Homepage Tracking Widget -->
+    <form class="quick-track-box" onsubmit="event.preventDefault(); window.location.href='track_order.html?code=' + encodeURIComponent(document.getElementById('homeTrackInput').value);">
+      <input type="text" id="homeTrackInput" required placeholder="Enter Tracking Code (e.g. APX-849201)">
+      <button type="submit">Track Order</button>
+    </form>
   </section>
 
-  <!-- 4. THE 3-CATEGORY GATEWAY -->
-  <h2 class="section-title">Explore Our Collections</h2>
-  <div class="category-grid">
-    <div class="category-card">
-      <div class="category-icon">🛋️</div>
-      <h3>Comfort</h3>
-      <p>Ergonomic cushions, posture supports & premium relaxation gear.</p>
-      <a href="comfort.html" class="category-btn">Browse Comfort →</a>
+  <main class="container">
+    <div class="section-title">
+      <span>Featured Products</span>
     </div>
-    <div class="category-card">
-      <div class="category-icon">🌿</div>
-      <h3>Gardening</h3>
-      <p>Precision tools, outdoor care gear & effortless yard maintenance.</p>
-      <a href="gardening.html" class="category-btn">Browse Gardening →</a>
-    </div>
-    <div class="category-card">
-      <div class="category-icon">❤️</div>
-      <h3>Health</h3>
-      <p>Daily wellness accessories, therapeutic tools & healthy living essentials.</p>
-      <a href="health.html" class="category-btn">Browse Health →</a>
-    </div>
-  </div>
 
-  <!-- 5. FOOTER -->
+    <div class="category-tabs">
+      <button class="cat-btn active" onclick="filterCategory('All', this)">All Items</button>
+      <button class="cat-btn" onclick="filterCategory('Comfort', this)">Comfort</button>
+      <button class="cat-btn" onclick="filterCategory('Gardening', this)">Gardening</button>
+      <button class="cat-btn" onclick="filterCategory('Health', this)">Health</button>
+    </div>
+
+    <div class="product-grid" id="productGrid">
+      <p>Loading catalog...</p>
+    </div>
+  </main>
+
   <footer class="footer">
     <ul class="footer-links">
-      <li><a href="customer_support.html">About Apex Home & Living</a></li>
+      <li><a href="track_order.html">Track Order</a></li>
+      <li><a href="customer_support.html">About Apex</a></li>
       <li><a href="customer_support.html">Pay-On-Delivery Terms</a></li>
-      <li><a href="customer_support.html">Delivery & Shipping Info</a></li>
+      <li><a href="customer_support.html">Shipping Info</a></li>
       <li><a href="customer_support.html">Customer Support</a></li>
     </ul>
-    <div class="copyright">
-      © 2026 Apex Home & Living Nigeria. All Rights Reserved.
-    </div>
+    <div class="copyright">© 2026 Apex Home & Living Nigeria. All Rights Reserved.</div>
   </footer>
 
+  <script>
+    const SUPABASE_URL = "https://xdqkvwyuyqmtvkdtjjdu.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_YSudmbhRJKQv5Zlo1Zuu3Q_YNQgqQ8Y";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let allProducts = [];
+
+    async function loadStoreProducts() {
+      const { data, error } = await _supabase.from('products').select('*').order('id', { ascending: false });
+      if (error || !data) {
+        document.getElementById('productGrid').innerHTML = '<p>Unable to load products at the moment.</p>';
+        return;
+      }
+      allProducts = data;
+      renderProducts(allProducts);
+    }
+
+    function renderProducts(products) {
+      const grid = document.getElementById('productGrid');
+      if (products.length === 0) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #64748b;">No products found in this category.</p>';
+        return;
+      }
+      grid.innerHTML = products.map(p => `
+        <a href="product.html?id=${p.id}" class="product-card">
+          <img src="${p.images && p.images.length > 0 ? p.images[0] : 'https://via.placeholder.com/300'}" class="product-img" alt="${p.title}">
+          <div class="product-info">
+            <span class="product-category-tag">${p.category}</span>
+            <div class="product-name">${p.title}</div>
+            <div class="product-price-row">
+              <span class="product-price">₦${p.price.toLocaleString()}</span>
+              <span class="btn-view">View Item</span>
+            </div>
+          </div>
+        </a>
+      `).join('');
+    }
+
+    function filterCategory(category, btn) {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (category === 'All') {
+        renderProducts(allProducts);
+      } else {
+        renderProducts(allProducts.filter(p => p.category.toLowerCase() === category.toLowerCase()));
+      }
+    }
+
+    loadStoreProducts();
+  </script>
 </body>
 </html>
