@@ -4,6 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Product Details | Apex Home & Living</title>
+  
+  <!-- TikTok Pixel Code Start -->
+  <script>
+  !function (w, d, t) {
+    w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+  var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+  ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+
+
+    ttq.load('DBIUUR3C77U1OI24STTG');
+    ttq.page();
+  }(window, document, 'ttq');
+  </script>
+  <!-- TikTok Pixel Code End -->
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
@@ -43,14 +58,15 @@
     .prod-title { font-size: 1.5rem; font-weight: 800; color: #0d233a; line-height: 1.25; }
     .current-price { font-size: 1.6rem; font-weight: 900; color: #2d6a4f; }
     .pod-notice { background-color: #e8f5e9; border-left: 4px solid #2d6a4f; padding: 10px 12px; font-size: 0.85rem; color: #1b4e20; font-weight: 600; border-radius: 4px; }
-    /* Main featured image on product.html */
-.main-product-image img,
-.product-hero img {
-  width: 100%;
-  max-height: 400px; /* Gives the single product view a bigger spotlight */
-  object-fit: contain; /* Keeps the whole image visible without cropping product edges */
-  object-position: center;
-}
+    
+    .main-product-image img,
+    .product-hero img {
+      width: 100%;
+      max-height: 400px;
+      object-fit: contain;
+      object-position: center;
+    }
+
     .quantity-control { display: flex; align-items: center; gap: 12px; }
     .quantity-control label { font-weight: 700; font-size: 0.9rem; color: #334155; }
     .qty-btn-group { display: flex; align-items: center; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; background: #fff; }
@@ -162,6 +178,7 @@
       <li><a href="track_order.html">Track Order</a></li>
       <li><a href="customer_support.html">About Apex</a></li>
       <li><a href="customer_support.html">Pay-On-Delivery Terms</a></li>
+      <li><a href="customer_support.html">Shipping Info</a></li>
       <li><a href="customer_support.html">Customer Support</a></li>
     </ul>
     <div class="copyright">© 2026 Apex Home & Living Nigeria. All Rights Reserved.</div>
@@ -206,7 +223,6 @@
       document.getElementById('prodPrice').innerText = `₦${product.price.toLocaleString()}`;
       document.getElementById('prodDesc').innerText = product.description || "No description provided.";
 
-      // Render Features List separately
       if (product.features && Array.isArray(product.features) && product.features.length > 0) {
         const featuresCard = document.getElementById('featuresCard');
         const featuresList = document.getElementById('featuresList');
@@ -214,7 +230,6 @@
         featuresCard.style.display = 'block';
       }
 
-      // Render Image Gallery
       if (product.images && product.images.length > 0) {
         document.getElementById('mainImage').src = product.images[0];
         document.getElementById('thumbStrip').innerHTML = product.images.map((img, idx) => `
